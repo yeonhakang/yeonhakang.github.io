@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 농번기 - 스마트 농업 관리</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #4CAF50, #81C784);
+            margin: 0; padding: 20px; min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; margin: 0 auto; background: white; 
+            border-radius: 20px; padding: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header { text-align: center; margin-bottom: 30px; }
+        .title { font-size: 2.5em; color: #2E7D32; margin-bottom: 10px; }
+        .card { 
+            background: #f8f9fa; padding: 20px; margin: 15px 0; 
+            border-radius: 15px; border-left: 5px solid #4CAF50;
+        }
+        .card h3 { color: #2E7D32; margin-bottom: 15px; }
+        .input-group { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
+        input, select, button { 
+            padding: 12px; border: 2px solid #ddd; 
+            border-radius: 8px; font-size: 16px;
+        }
+        input { flex: 1; min-width: 150px; }
+        select { min-width: 80px; }
+        button { 
+            background: #4CAF50; color: white; border: none; 
+            cursor: pointer; font-weight: bold;
+        }
+        button:hover { background: #45a049; }
+        .result { 
+            margin-top: 15px; padding: 15px; background: #e8f5e9; 
+            border-radius: 8px; color: #2e7d32; font-size: 18px;
+            font-weight: bold;
+        }
+        .weather-info { 
+            display: grid; grid-template-columns: 1fr 1fr; 
+            gap: 15px; margin-top: 15px; 
+        }
+        .weather-item { 
+            background: white; padding: 15px; 
+            border-radius: 10px; text-align: center; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🌾 농번기</h1>
+            <p style="font-size: 1.2em; color: #666;">스마트 농업 관리 시스템</p>
+        </div>
+
+        <div class="card">
+            <h3>📏 농장 면적 계산기</h3>
+            <p style="color: #666; margin-bottom: 15px;">평, m², ha 단위를 자유롭게 변환하세요</p>
+            <div class="input-group">
+                <input type="number" id="area" placeholder="면적을 입력하세요" step="0.1">
+                <select id="unit">
+                    <option value="pyeong">평</option>
+                    <option value="m2">m²</option>
+                    <option value="ha">ha</option>
+                </select>
+                <button onclick="convert()">변환하기</button>
+            </div>
+            <div id="result" class="result" style="display:none;"></div>
+        </div>
+
+        <div class="card">
+            <h3>🌤️ 오늘의 농업 날씨</h3>
+            <div class="weather-info">
+                <div class="weather-item">
+                    <div style="font-size: 2em;">🌡️</div>
+                    <strong>기온</strong><br>22°C
+                </div>
+                <div class="weather-item">
+                    <div style="font-size: 2em;">💧</div>
+                    <strong>습도</strong><br>65%
+                </div>
+                <div class="weather-item">
+                    <div style="font-size: 2em;">☔</div>
+                    <strong>강수확률</strong><br>10%
+                </div>
+                <div class="weather-item">
+                    <div style="font-size: 2em;">💨</div>
+                    <strong>풍속</strong><br>2.5m/s
+                </div>
+            </div>
+            <p style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px; color: #1976d2;">
+                🌱 <strong>농작업 추천:</strong> 파종하기 좋은 날씨입니다!
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>📅 이번 주 농작업 일정</h3>
+            <div style="line-height: 2.5;">
+                <div>🌱 <strong>월요일:</strong> 모종 관찰 및 생육 기록</div>
+                <div>💧 <strong>수요일:</strong> 관개시설 점검 및 급수</div>
+                <div>🌾 <strong>금요일:</strong> 수확 준비 및 도구 점검</div>
+                <div>📊 <strong>일요일:</strong> 주간 농장 데이터 정리</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📊 예상 수확량 (평 기준)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2em;">🌾</div>
+                    <strong>벼</strong><br>
+                    <span style="color: #4CAF50; font-size: 1.2em; font-weight: bold;">1.8kg/평</span>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2em;">🥬</div>
+                    <strong>배추</strong><br>
+                    <span style="color: #4CAF50; font-size: 1.2em; font-weight: bold;">18kg/평</span>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2em;">🌶️</div>
+                    <strong>고추</strong><br>
+                    <span style="color: #4CAF50; font-size: 1.2em; font-weight: bold;">4.5kg/평</span>
+                </div>
+            </div>
+            <p style="margin-top: 15px; padding: 10px; background: #e8f5e9; border-radius: 8px; color: #2e7d32;">
+                💡 <strong>전망:</strong> 올해 기상조건으로 평년 대비 5% 증수 전망
+            </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; color: #666;">
+            <p>🌾 농번기 v1.0 | Made with ❤️ for 농민</p>
+        </div>
+    </div>
+
+    <script>
+        function convert() {
+            const area = parseFloat(document.getElementById('area').value);
+            const unit = document.getElementById('unit').value;
+            const result = document.getElementById('result');
+            
+            if (!area || area <= 0) {
+                alert('올바른 면적을 입력해주세요!');
+                return;
+            }
+
+            let output = '';
+            
+            if (unit === 'pyeong') {
+                const m2 = (area * 3.3058).toFixed(1);
+                const ha = (area * 0.0003305).toFixed(4);
+                output = `<div>${area}평 =</div>
+                         <div>📐 ${m2}m²</div>
+                         <div>🏞️ ${ha}ha</div>`;
+            } else if (unit === 'm2') {
+                const pyeong = (area * 0.3025).toFixed(1);
+                const ha = (area / 10000).toFixed(4);
+                output = `<div>${area}m² =</div>
+                         <div>📐 ${pyeong}평</div>
+                         <div>🏞️ ${ha}ha</div>`;
+            } else if (unit === 'ha') {
+                const m2 = (area * 10000).toFixed(0);
+                const pyeong = (area * 3025).toFixed(0);
+                output = `<div>${area}ha =</div>
+                         <div>📐 ${m2}m²</div>
+                         <div>📐 ${pyeong}평</div>`;
+            }
+
+            result.innerHTML = output;
+            result.style.display = 'block';
+        }
+
+        // 실시간 시간 업데이트
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('ko-KR');
+            document.title = `🌾 농번기 - ${timeString}`;
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 엔터키로도 변환 가능
+        document.getElementById('area').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                convert();
+            }
+        });
+    </script>
+</body>
+</html>
